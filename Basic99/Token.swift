@@ -13,6 +13,8 @@ enum TokenType {
 //    case Real
     case plus
     case minus
+    case multiply
+    case divide
     case eof
 }
 

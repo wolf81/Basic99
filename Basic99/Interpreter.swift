@@ -52,6 +52,8 @@ class Interpreter {
         switch operation.type {
         case .plus: try remove(.plus)
         case .minus: try remove(.minus)
+        case .multiply: try remove(.multiply)
+        case .divide: try remove(.divide)
         default: throw InterpreterError.invalidInput
         }
                 
@@ -61,6 +63,8 @@ class Interpreter {
         switch operation.type {
         case .plus: return (left.value as! Int) + (right.value as! Int)
         case .minus: return (left.value as! Int) - (right.value as! Int)
+        case .multiply: return (left.value as! Int) * (right.value as! Int)
+        case .divide: return (left.value as! Int) / (right.value as! Int)
         default: throw InterpreterError.invalidInput
         }
     }
@@ -108,6 +112,12 @@ class Interpreter {
             case _ where character == "-":
                 advance()
                 return Token(type: .minus)
+            case _ where character == "*":
+                advance()
+                return Token(type: .multiply)
+            case _ where character == "/":
+                advance()
+                return Token(type: .divide)
             default:
                 throw InterpreterError.invalidInput
             }
