@@ -34,20 +34,6 @@ class Interpreter {
         }
     }
     
-    func remove(_ tokenType: TokenType) throws {
-        if self.currentToken.type == tokenType {
-            self.currentToken = try nextToken()
-        } else {
-            throw InterpreterError.invalidInput
-        }
-    }
-    
-    func term() throws -> Int {
-        let token = self.currentToken
-        try remove(.decimal)
-        return token.value as! Int
-    }
-    
     func expression() throws -> Any {
         self.currentToken = try nextToken()
         
@@ -69,9 +55,25 @@ class Interpreter {
                 result = result * (try self.term())
             default: fatalError()
             }
-        }        
+        }
         
         return result
+    }
+    
+    // MARK: - Private
+    
+    private func remove(_ tokenType: TokenType) throws {
+        if self.currentToken.type == tokenType {
+            self.currentToken = try nextToken()
+        } else {
+            throw InterpreterError.invalidInput
+        }
+    }
+    
+    private func term() throws -> Int {
+        let token = self.currentToken
+        try remove(.decimal)
+        return token.value as! Int
     }
     
     private func advance() {
