@@ -22,10 +22,16 @@ class Interpreter {
     let text: String
     var position: Int
     var currentToken: Token = Token(type: .eof)
+    var currentCharacter: Character?
     
     init(text: String) {
         self.text = text
         self.position = 0
+        
+        if self.text.count > 0 {
+            let characterString = self.text[self.position ..< (self.position + 1)]
+            self.currentCharacter = Character(characterString)
+        }
     }
     
     func remove(_ tokenType: TokenType) throws {
@@ -59,46 +65,54 @@ class Interpreter {
         }
     }
     
+    private func advance() {
+        self.position += 1
+        
+        if self.position > (self.text.count - 1) {
+            self.currentCharacter = nil
+        } else {
+            let characterString = self.text[self.position ..< (self.position + 1)]
+            self.currentCharacter = Character(characterString)
+        }
+    }
+    
+    private func skipWhitespace() {
+        if let character = self.currentCharacter, character.isSpace {
+            advance()
+        }
+    }
+    
+    private func intValue() -> Int {
+        var result = ""
+        while let character = self.currentCharacter, character.isDigit {
+            result += String(character)
+            advance()
+        }
+        
+        return Int(result)!
+    }
+    
     private func nextToken() throws -> Token {
         guard self.position < self.text.count else { return Token(type: .eof) }
         
-        let characterString = self.text[self.position ..< (self.position + 1)]
-        guard characterString != " " else {
-            self.position += 1
-            return try nextToken()
-        }
-        
-        let character = Character(characterString)
-        if character.isASCII && character.isNumber {
-            var valueString = characterString
-            while true {
-                if self.position == (self.text.count - 1) { break }
-                
-                let nextCharacterString = self.text[(self.position + 1) ..< (self.position + 2)]
-                let nextCharacter = Character(nextCharacterString)
-                if nextCharacter.isASCII && nextCharacter.isNumber {
-                    valueString += nextCharacterString
-                    self.position += 1
-                } else {
-                    break
-                }
+        while let character = self.currentCharacter {
+            switch character {
+            case _ where character.isSpace:
+                skipWhitespace()
+                continue
+            case _ where character.isDigit:
+                return Token(type: .decimal, value: self.intValue())
+            case _ where character == "+":
+                advance()
+                return Token(type: .plus)
+            case _ where character == "-":
+                advance()
+                return Token(type: .minus)
+            default:
+                throw InterpreterError.invalidInput
             }
-            
-            // if next character is also a number, append, otherwise return decimal value
-            let value = Int(valueString)!
-            self.position += 1
-            return Token(type: .decimal, value: value)
         }
         
-        switch character {
-        case "+":
-            self.position += 1
-            return Token(type: .plus)
-        case "-":
-            self.position += 1
-            return Token(type: .minus)
-        default:
-            throw InterpreterError.invalidInput
-        }
+        return Token(type: .eof)
     }
 }

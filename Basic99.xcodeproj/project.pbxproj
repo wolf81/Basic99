@@ -11,6 +11,7 @@
 		79DA712324A9882200842FDC /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DA712224A9882200842FDC /* Token.swift */; };
 		79DA712524A98B8800842FDC /* Interpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DA712424A98B8800842FDC /* Interpreter.swift */; };
 		79DA712724A9903500842FDC /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DA712624A9903500842FDC /* StringExtensions.swift */; };
+		79DA712924A9CA1700842FDC /* CharacterExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DA712824A9CA1600842FDC /* CharacterExtensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,6 +32,7 @@
 		79DA712224A9882200842FDC /* Token.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
 		79DA712424A98B8800842FDC /* Interpreter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interpreter.swift; sourceTree = "<group>"; };
 		79DA712624A9903500842FDC /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
+		79DA712824A9CA1600842FDC /* CharacterExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterExtensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +69,7 @@
 				79DA712224A9882200842FDC /* Token.swift */,
 				79DA712424A98B8800842FDC /* Interpreter.swift */,
 				79DA712624A9903500842FDC /* StringExtensions.swift */,
+				79DA712824A9CA1600842FDC /* CharacterExtensions.swift */,
 			);
 			path = Basic99;
 			sourceTree = "<group>";
@@ -130,6 +133,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				79DA712724A9903500842FDC /* StringExtensions.swift in Sources */,
+				79DA712924A9CA1700842FDC /* CharacterExtensions.swift in Sources */,
 				79DA712524A98B8800842FDC /* Interpreter.swift in Sources */,
 				79DA711C24A987F600842FDC /* main.swift in Sources */,
 				79DA712324A9882200842FDC /* Token.swift in Sources */,
