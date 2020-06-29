@@ -23,7 +23,7 @@ func main() {
         let interpreter = Interpreter(text: line)
         do {
             let expression = try interpreter.expression()
-            print(expression)
+            print("  \(expression)")
         } catch let error {
             print(error.localizedDescription)
         }
