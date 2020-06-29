@@ -42,31 +42,36 @@ class Interpreter {
         }
     }
     
+    func term() throws -> Int {
+        let token = self.currentToken
+        try remove(.decimal)
+        return token.value as! Int
+    }
+    
     func expression() throws -> Any {
         self.currentToken = try nextToken()
         
-        let left = self.currentToken
-        try remove(.decimal)
+        var result = try term()
         
-        let operation = self.currentToken
-        switch operation.type {
-        case .plus: try remove(.plus)
-        case .minus: try remove(.minus)
-        case .multiply: try remove(.multiply)
-        case .divide: try remove(.divide)
-        default: throw InterpreterError.invalidInput
-        }
-                
-        let right = self.currentToken
-        try remove(.decimal)
+        while self.currentToken.type.isArithmeticOperation {
+            switch self.currentToken.type {
+            case .plus:
+                try remove(.plus)
+                result = result + (try self.term())
+            case .minus:
+                try remove(.minus)
+                result = result - (try self.term())
+            case .divide:
+                try remove(.divide)
+                result = result / (try self.term())
+            case .multiply:
+                try remove(.multiply)
+                result = result * (try self.term())
+            default: fatalError()
+            }
+        }        
         
-        switch operation.type {
-        case .plus: return (left.value as! Int) + (right.value as! Int)
-        case .minus: return (left.value as! Int) - (right.value as! Int)
-        case .multiply: return (left.value as! Int) * (right.value as! Int)
-        case .divide: return (left.value as! Int) / (right.value as! Int)
-        default: throw InterpreterError.invalidInput
-        }
+        return result
     }
     
     private func advance() {

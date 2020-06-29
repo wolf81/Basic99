@@ -16,6 +16,11 @@ enum TokenType {
     case multiply
     case divide
     case eof
+    
+    var isArithmeticOperation: Bool {
+        var arithmeticOperationTypes: [TokenType] = [.plus, .minus, .divide, .multiply]
+        return arithmeticOperationTypes.contains(self)
+    }
 }
 
 class Token {
