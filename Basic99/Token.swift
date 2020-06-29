@@ -18,7 +18,7 @@ enum TokenType {
     case eof
     
     var isArithmeticOperation: Bool {
-        var arithmeticOperationTypes: [TokenType] = [.plus, .minus, .divide, .multiply]
+        let arithmeticOperationTypes: [TokenType] = [.plus, .minus, .divide, .multiply]
         return arithmeticOperationTypes.contains(self)
     }
 }
