@@ -16,12 +16,13 @@ func main() {
     
     print(">", terminator: "")
     while let line = readLine() {
-        if line == "BYE" {
+        if line.uppercased() == "BYE" {
             break
         }
-
-        let interpreter = Interpreter(text: line)
+        
+        let lexer = Lexer(text: line.uppercased())
         do {
+            let interpreter = try Interpreter(lexer: lexer)
             let expression = try interpreter.expression()
             print("  \(expression)")
         } catch let error {
