@@ -10,9 +10,7 @@ import Foundation
 
 class Parser {
     let lexer: Lexer
-//    var position: Int
     var currentToken: Token = Token(type: .eof)
-//    var currentCharacter: Character?
     
     init(lexer: Lexer) throws {
         self.lexer = lexer
@@ -26,16 +24,24 @@ class Parser {
     func factor() throws -> ASTNode {
         let token = self.currentToken
         
-        if token.type == .decimal {
+        switch token.type {
+        case .plus:
+            try remove(.plus)
+            let node = try factor()
+            return ASTUnaryOperationNode(token: token, expression: node)
+        case .minus:
+            try remove(.minus)
+            let node = try factor()
+            return ASTUnaryOperationNode(token: token, expression: node)
+        case .decimal:
             try remove(.decimal)
             return ASTNumberNode(token: token)
-        } else if token.type == .leftParenthesis {
+        case .leftParenthesis:
             try remove(.leftParenthesis)
             let result = try self.expression()
             try remove(.rightParenthesis)
             return result
-        } else {
-            throw InterpreterError.invalidInput
+        default: throw InterpreterError.invalidInput
         }
     }
     
@@ -52,7 +58,7 @@ class Parser {
             }
             
             let rightNode = try self.factor()
-            node = ASTBinaryOperationNode(operation: token, left: node, right: rightNode)
+            node = ASTBinaryOperationNode(token: token, left: node, right: rightNode)
         }
         
         return node
@@ -70,7 +76,7 @@ class Parser {
             }
             
             let rightNode = try self.term()
-            node = ASTBinaryOperationNode(operation: token, left: node, right: rightNode)
+            node = ASTBinaryOperationNode(token: token, left: node, right: rightNode)
         }
         
         return node
