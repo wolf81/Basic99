@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		799353AE24B236DD00D87FEB /* ASTNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799353AD24B236DD00D87FEB /* ASTNode.swift */; };
+		799353B024B241B600D87FEB /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799353AF24B241B600D87FEB /* Parser.swift */; };
+		799353B224B2451E00D87FEB /* ASTNodeVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799353B124B2451E00D87FEB /* ASTNodeVisitor.swift */; };
 		79DA711C24A987F600842FDC /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DA711B24A987F600842FDC /* main.swift */; };
 		79DA712324A9882200842FDC /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DA712224A9882200842FDC /* Token.swift */; };
 		79DA712524A98B8800842FDC /* Interpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DA712424A98B8800842FDC /* Interpreter.swift */; };
@@ -28,6 +31,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		799353AD24B236DD00D87FEB /* ASTNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASTNode.swift; sourceTree = "<group>"; };
+		799353AF24B241B600D87FEB /* Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
+		799353B124B2451E00D87FEB /* ASTNodeVisitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASTNodeVisitor.swift; sourceTree = "<group>"; };
 		79DA711824A987F600842FDC /* Basic99 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Basic99; sourceTree = BUILT_PRODUCTS_DIR; };
 		79DA711B24A987F600842FDC /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		79DA712224A9882200842FDC /* Token.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
@@ -75,6 +81,9 @@
 				79DA712624A9903500842FDC /* StringExtensions.swift */,
 				79DA712824A9CA1600842FDC /* CharacterExtensions.swift */,
 				79FEACED24ACE81E004CC87E /* Lexer.swift */,
+				799353AD24B236DD00D87FEB /* ASTNode.swift */,
+				799353AF24B241B600D87FEB /* Parser.swift */,
+				799353B124B2451E00D87FEB /* ASTNodeVisitor.swift */,
 			);
 			path = Basic99;
 			sourceTree = "<group>";
@@ -141,7 +150,10 @@
 				79DA712924A9CA1700842FDC /* CharacterExtensions.swift in Sources */,
 				79DA712524A98B8800842FDC /* Interpreter.swift in Sources */,
 				79DA711C24A987F600842FDC /* main.swift in Sources */,
+				799353B024B241B600D87FEB /* Parser.swift in Sources */,
+				799353B224B2451E00D87FEB /* ASTNodeVisitor.swift in Sources */,
 				79FEACEE24ACE81E004CC87E /* Lexer.swift in Sources */,
+				799353AE24B236DD00D87FEB /* ASTNode.swift in Sources */,
 				79DA712324A9882200842FDC /* Token.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

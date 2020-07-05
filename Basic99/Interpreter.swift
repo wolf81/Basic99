@@ -19,77 +19,33 @@ enum InterpreterError: LocalizedError {
 }
 
 class Interpreter {
-    let lexer: Lexer
-//    var position: Int
-    var currentToken: Token = Token(type: .eof)
-//    var currentCharacter: Character?
+    private let parser: Parser
     
-    init(lexer: Lexer) throws {
-        self.lexer = lexer
-        self.currentToken = try self.lexer.nextToken()        
+    init(parser: Parser) {
+        self.parser = parser
     }
-    
-    func factor() throws -> Int {
-        let token = self.currentToken
         
-        if token.type == .decimal {
-            try remove(.decimal)
-            return token.value as! Int
-        } else if token.type == .leftParenthesis {
-            try remove(.leftParenthesis)
-            let result = try self.expression()
-            try remove(.rightParenthesis)
-            return result as! Int
-        } else {
-            throw InterpreterError.invalidInput
-        }
-    }
-    
-    func term() throws -> Int {
-        var result = try factor()
-        
-        let termOperations: [TokenType] = [.multiply, .divide]
-        while termOperations.contains(currentToken.type) {
-            switch self.currentToken.type {
-            case .multiply:
-                try remove(.multiply)
-                result = result * (try self.factor())
-            case .divide:
-                try remove(.divide)
-                result = result / (try self.factor())
-            default: fatalError()
+    private func visit(node: ASTNode) throws -> Any {
+        switch node {
+        case let binaryOperationNode as ASTBinaryOperationNode:
+            let left = try visit(node: binaryOperationNode.left) as! Int
+            let right = try visit(node: binaryOperationNode.right) as! Int
+            
+            switch binaryOperationNode.operation {
+            case .divide: return left / right
+            case .plus: return left + right
+            case .minus: return left - right
+            case .multiply: return left * right
+            default: throw InterpreterError.invalidInput
             }
+        case let numberNode as ASTNumberNode:
+            return numberNode.value
+        default: throw InterpreterError.invalidInput
         }
-        
-        return result
     }
     
-    func expression() throws -> Any {
-        var result = try term()
-
-        let expressionOperations: [TokenType] = [.plus, .minus]
-        while expressionOperations.contains(self.currentToken.type) {
-            switch self.currentToken.type {
-            case .plus:
-                try remove(.plus)
-                result = result + (try self.term())
-            case .minus:
-                try remove(.minus)
-                result = result - (try self.term())
-            default: fatalError()
-            }
-        }
-        
-        return result
-    }
-    
-    // MARK: - Private
-    
-    private func remove(_ tokenType: TokenType) throws {
-        if self.currentToken.type == tokenType {
-            self.currentToken = try self.lexer.nextToken()
-        } else {
-            throw InterpreterError.invalidInput
-        }
+    func interpret() throws -> Any {
+        let tree = try self.parser.parse()
+        return try visit(node: tree)
     }
 }

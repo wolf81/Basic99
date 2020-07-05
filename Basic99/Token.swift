@@ -18,6 +18,16 @@ enum TokenType {
     case leftParenthesis
     case rightParenthesis
     case eof
+    
+    var isExpressionOperation: Bool {
+        let expressionOperations: [TokenType] = [.plus, .minus]
+        return expressionOperations.contains(self)
+    }
+
+    var isTermOperation: Bool {
+        let termOperations: [TokenType] = [.multiply, .divide]
+        return termOperations.contains(self)
+    }
 }
 
 class Token {

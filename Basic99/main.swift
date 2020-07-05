@@ -22,9 +22,10 @@ func main() {
         
         let lexer = Lexer(text: line.uppercased())
         do {
-            let interpreter = try Interpreter(lexer: lexer)
-            let expression = try interpreter.expression()
-            print("  \(expression)")
+            let parser = try Parser(lexer: lexer)
+            let interpreter = Interpreter(parser: parser)
+            let result = try interpreter.interpret()
+            print("  \(result)")
         } catch let error {
             print(error.localizedDescription)
         }
