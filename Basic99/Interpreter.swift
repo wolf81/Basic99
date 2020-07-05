@@ -31,8 +31,18 @@ class Interpreter {
     
     func factor() throws -> Int {
         let token = self.currentToken
-        try remove(.decimal)
-        return token.value as! Int
+        
+        if token.type == .decimal {
+            try remove(.decimal)
+            return token.value as! Int
+        } else if token.type == .leftParenthesis {
+            try remove(.leftParenthesis)
+            let result = try self.expression()
+            try remove(.rightParenthesis)
+            return result as! Int
+        } else {
+            throw InterpreterError.invalidInput
+        }
     }
     
     func term() throws -> Int {
@@ -82,61 +92,4 @@ class Interpreter {
             throw InterpreterError.invalidInput
         }
     }
-        
-//    private func advance() {
-//        self.position += 1
-//
-//        if self.position > (self.text.count - 1) {
-//            self.currentCharacter = nil
-//        } else {
-//            let characterString = self.text[self.position ..< (self.position + 1)]
-//            self.currentCharacter = Character(characterString)
-//        }
-//    }
-//
-//    private func skipWhitespace() {
-//        if let character = self.currentCharacter, character.isSpace {
-//            advance()
-//        }
-//    }
-//
-//    private func intValue() -> Int {
-//        var result = ""
-//        while let character = self.currentCharacter, character.isDigit {
-//            result += String(character)
-//            advance()
-//        }
-//
-//        return Int(result)!
-//    }
-//
-//    private func nextToken() throws -> Token {
-//        guard self.position < self.text.count else { return Token(type: .eof) }
-//
-//        while let character = self.currentCharacter {
-//            switch character {
-//            case _ where character.isSpace:
-//                skipWhitespace()
-//                continue
-//            case _ where character.isDigit:
-//                return Token(type: .decimal, value: self.intValue())
-//            case _ where character == "+":
-//                advance()
-//                return Token(type: .plus)
-//            case _ where character == "-":
-//                advance()
-//                return Token(type: .minus)
-//            case _ where character == "*":
-//                advance()
-//                return Token(type: .multiply)
-//            case _ where character == "/":
-//                advance()
-//                return Token(type: .divide)
-//            default:
-//                throw InterpreterError.invalidInput
-//            }
-//        }
-//
-//        return Token(type: .eof)
-//    }
 }

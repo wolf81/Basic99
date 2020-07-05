@@ -46,6 +46,12 @@ class Lexer {
             case _ where character == "/":
                 advance()
                 return Token(type: .divide)
+            case _ where character == "(":
+                advance()
+                return Token(type: .leftParenthesis)
+            case _ where character == ")":
+                advance()
+                return Token(type: .rightParenthesis)
             default:
                 throw InterpreterError.invalidInput
             }
