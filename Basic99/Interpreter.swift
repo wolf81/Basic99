@@ -24,28 +24,38 @@ class Interpreter {
     init(parser: Parser) {
         self.parser = parser
     }
-        
+
+    func interpret() throws -> Any {
+        let tree = try self.parser.parse()
+        return try visit(node: tree)
+    }
+
+    // MARK: - Private
+    
     private func visit(node: ASTNode) throws -> Any {
         switch node {
         case let binaryOperationNode as ASTBinaryOperationNode:
-            let left = try visit(node: binaryOperationNode.left) as! Int
-            let right = try visit(node: binaryOperationNode.right) as! Int
-            
-            switch binaryOperationNode.operation {
-            case .divide: return left / right
-            case .plus: return left + right
-            case .minus: return left - right
-            case .multiply: return left * right
-            default: throw InterpreterError.invalidInput
-            }
+            return try visit(binaryOperationNode: binaryOperationNode)
         case let numberNode as ASTNumberNode:
-            return numberNode.value
+            return visit(numberNode: numberNode)
         default: throw InterpreterError.invalidInput
         }
     }
     
-    func interpret() throws -> Any {
-        let tree = try self.parser.parse()
-        return try visit(node: tree)
+    private func visit(binaryOperationNode: ASTBinaryOperationNode) throws -> Int {
+        let left = try visit(node: binaryOperationNode.left) as! Int
+        let right = try visit(node: binaryOperationNode.right) as! Int
+        
+        switch binaryOperationNode.operation {
+        case .divide: return left / right
+        case .plus: return left + right
+        case .minus: return left - right
+        case .multiply: return left * right
+        default: fatalError()
+        }
+    }
+    
+    private func visit(numberNode: ASTNumberNode) -> Int {
+        return numberNode.value
     }
 }
