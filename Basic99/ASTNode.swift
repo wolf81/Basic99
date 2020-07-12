@@ -45,3 +45,39 @@ class ASTUnaryOperationNode: ASTNode {
         super.init(token: token)
     }
 }
+
+class ASTVarNode: ASTNode {
+    var value: Any { self.token.value as Any }
+    
+    override init(token: Token) {
+        super.init(token: token)
+    }
+}
+
+class ASTNoOperationNode: ASTNode {    
+}
+
+class ASTCompoundNode: ASTNode {
+    let children: [ASTNode]
+    
+    init(children: [ASTNode]) {
+        self.children = children
+        
+        let dummyToken = Token(type: .semicolon)
+        super.init(token: dummyToken)
+    }
+}
+
+class ASTAssignNode: ASTNode {
+    var operation: TokenType { self.token.type }
+    
+    let left: ASTNode
+    let right: ASTNode
+    
+    init(token: Token, left: ASTNode, right: ASTNode) {
+        self.left = left
+        self.right = right
+        
+        super.init(token: token)
+    }
+}

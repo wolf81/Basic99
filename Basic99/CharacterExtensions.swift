@@ -11,5 +11,9 @@ import Foundation
 extension Character {
     var isSpace: Bool { self == " " }
     
+    var isAlpha: Bool { self.isASCII && self.isLetter }
+    
+    var isAlphaNumeric: Bool { self.isASCII && (self.isLetter || self.isNumber) }
+    
     var isDigit: Bool { self.isASCII && self.isNumber }
 }

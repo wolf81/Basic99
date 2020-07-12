@@ -17,6 +17,9 @@ enum TokenType {
     case divide
     case leftParenthesis
     case rightParenthesis
+    case id
+    case assign
+    case semicolon
     case eof
     
     var isExpressionOperation: Bool {

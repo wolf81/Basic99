@@ -18,10 +18,16 @@ class Parser {
     }
     
     func parse() throws -> ASTNode {
-        return try self.expression()
+        return try expression()
     }
     
-    func factor() throws -> ASTNode {
+    // MARK: - Private
+    
+    private func program() throws -> ASTCompoundNode {
+        return ASTCompoundNode(children: try statementList())
+    }
+
+    private func factor() throws -> ASTNode {
         let token = self.currentToken
         
         switch token.type {
@@ -38,14 +44,61 @@ class Parser {
             return ASTNumberNode(token: token)
         case .leftParenthesis:
             try remove(.leftParenthesis)
-            let result = try self.expression()
+            let result = try expression()
             try remove(.rightParenthesis)
             return result
+        case .id:
+            return try variable()
         default: throw InterpreterError.invalidInput
         }
     }
     
-    func term() throws -> ASTNode {
+    private func statementList() throws -> [ASTNode] {
+        let node = try statement()
+        var nodes: [ASTNode] = [node]
+        
+        while self.currentToken.type == .semicolon {
+            try remove(.semicolon)
+            nodes.append(try statement())
+        }
+        
+        if self.currentToken.type == .id {
+            print("handle properly")
+            throw InterpreterError.invalidInput
+        }
+        
+        return nodes
+    }
+    
+    private func statement() throws -> ASTNode {
+        switch self.currentToken.type {
+        case .id:
+            return try assignmentStatement()
+        default:
+            return empty()
+        }
+    }    
+    
+    private func assignmentStatement() throws -> ASTAssignNode {
+        let left = try variable()
+        let token = self.currentToken
+        try remove(.assign)
+        let right = try expression()
+        let node = ASTAssignNode(token: token, left: left, right: right)
+        return node
+    }
+    
+    private func empty() -> ASTNoOperationNode {
+        return ASTNoOperationNode(token: self.currentToken)
+    }
+    
+    private func variable() throws -> ASTNode {
+        let node = ASTVarNode(token: self.currentToken)
+        try remove(.id)
+        return node
+    }
+    
+    private func term() throws -> ASTNode {
         var node = try factor()
         
         while self.currentToken.type.isTermOperation {
@@ -64,7 +117,7 @@ class Parser {
         return node
     }
     
-    func expression() throws -> ASTNode {
+    private func expression() throws -> ASTNode {
         var node = try term()
 
         while self.currentToken.type.isExpressionOperation {
@@ -81,9 +134,7 @@ class Parser {
         
         return node
     }
-    
-    // MARK: - Private
-    
+        
     private func remove(_ tokenType: TokenType) throws {
         if self.currentToken.type == tokenType {
             self.currentToken = try self.lexer.nextToken()

@@ -15,17 +15,18 @@ func main() {
 //    print("token: \(token)")
     
     print(">", terminator: "")
-    while let line = readLine() {
-        if line.uppercased() == "BYE" {
+    while let line = readLine()?.uppercased() {
+        if line == "BYE" {
             break
         }
         
-        let lexer = Lexer(text: line.uppercased())
+        let lexer = Lexer(text: line)
         do {
             let parser = try Parser(lexer: lexer)
             let interpreter = Interpreter(parser: parser)
-            let result = try interpreter.interpret()
-            print("  \(result)")
+            if let result = try interpreter.interpret() {
+                print("  \(result)")
+            }            
         } catch let error {
             print(error.localizedDescription)
         }
